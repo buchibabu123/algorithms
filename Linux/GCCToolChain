@@ -1,0 +1,40 @@
+	->gcc is a tool chain (GNU c compiler)
+	->it is a combination of preprocessor,compiler,assembler,linker
+	->compilation steps
+
+
+	Preprocessing->compilation->Assembling->liking
+
+
+Step1:Preprosessing the given input file(app.c)
+	gcc -E app.c -o app.i
+Step2:Compiling the prepoocessed file(app.i)
+	gcc -S app.i -o app.s
+	human redable form to assembly language
+Step3:Converting compiling code to assembly language file (Assembling)
+	gcc -c app.s -o app.o
+	assembly language to machine code
+Step4:linking 
+	gcc app.o -o app (app s the final executable file name)
+
+Translation:
+	->processing the file from step1 to step3 is  called translation
+	
+
+	->libraries are processed only by linker
+	->header files are just for syntax checking without header files also code works
+	
+objdump:It is a tool used to show the contents of a binary files
+	objdump -D app.o | more
+	->it converts binary to hexa form
+
+file :this command gives you type of the file (tesxt ,executable...)
+	file filename
+object:CPU specific instructions
+executable:startup code + main object file
+
+Compilation -->Translation
+	
+Linking -->Building executable (assigning address to instructions + some more startup code)
+
+

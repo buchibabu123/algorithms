@@ -1,0 +1,272 @@
+
+Event managment
+	->events in linux are called signals
+	->signals are asynchronous messages delevered to a process or a  group
+	->signals are used to notify a process about occurance of an event
+	->Linux categorize events into 2 groups
+		1.)System events
+		2.)Application local events
+	->system events occur during apps execution,due to instruction which cause exceptions on the  processor ,or interrupts on a specific device
+	->application local events are process defined and their occurance is local to the app context;
+	->application local events are also reffered as process communication signals
+	->linux kernel provides 32 signals for system event notification and 32 signals for application events
+
+general Purpose Signals
+	->These signals are used to notify system events, and they are named after the event to which they are bound
+	
+
+JOB CONTROL
+	
+	->these signals are used to notify process about state change
+	->SIGCHLD (17)
+	->SIGCONT (18)
+	->SIGSTOP (19)
+	->SIGTSTP (20)
+	->SIGTTIN (21)
+	->SIGTTOU (22)
+
+TERMINATION CONTROL
+	->These  signals are used to terminate a process
+	->SIGHUB (1)
+	->SIGINT (2)
+	->SIGQUIT (3)
+	->SIGKILL (9)
+	->SIGTERM (15)
+Asynchronous I/O
+	
+	->These signals are used to notify process about state of i/o source
+	->SIGURG (23)
+	->SIGIO (29)
+
+Timer
+	->these signals are used to notify processes about expire of a time interval on a specified clock
+	->SIGALRM (14)
+	->SIGVTALRM (26)
+	->SIGPROF (27)
+
+->Error Reporting Signals
+	->these signals are used to notify process about exceptions occuring in process
+
+	->SIGILL (4)
+	->SIGTRAP (5)
+	->SIGABRT (6)
+	->SIGBUS (7)
+	->SIGFPE (8)
+	->SIGSEGV (11)
+	->SIGPIPE (13)
+	->SIGSTKFLT (16)
+	->SIGXCPU (24)
+	->SIGXFSZ (25)
+
+
+Signal Generation
+	1.)with another process (kill)
+	2.)exception handler (processor)
+	3.)kernel services (i/o,drivers)
+
+Signal Delivery
+	->signal subsystem (kernel)
+
+Signal destination
+	->process
+
+	->when a source entity rises a request for a signal to be delivered it is referred to as signal generation
+	->when a reciever process is made aware about occurance os signal and is forced  to respond is called signal delivery
+	->signal generation and it's delivery may or may not consecutive occurance ,there is a posibility of undeterministic delay between generation and delivery
+	->any of the following can cause delay
+		1.)Reciever process is in [un interruptable] wait state
+		2.)Reciever process found handling the previous occurance of source event
+		3.)Reciever process has explictly turned off signal reception
+	->when a signal cannot be delivered for any one of the reason ,it is put into recievers pending queue
+	->when a process recieves a signal it can handle the event as per only one of the following
+		1.)execution of kernel defined default signal handler
+		2.)execution of application defined signal handler
+		3.)setting the signal to be ignored
+	->application can be use signal API to change default handler execution
+		signal(signal_num,signal_handler);
+	->a signal can be configured to ignore signal
+		signal(SIG_NUM,SUG_IGN);
+	->we can change the signal handling mechanism for  a process any number of times
+		SIG_IGN -> SIG_DFT ->userdefined handler
+	->we can change behaviour any times any where
+
+Sigaction Flags
+
+	->signal by default use primary stack of the process
+	->while registering critical signal handlers like sgmentation voilation (SIGBUS,SIGSGV) it is preffered to configure this handler to use alternate stack
+	->setting up alternate stack
+		1.) application must allocate  memory area for the alternate stack
+		2.)let the kernel know the address of alternate stack sigaltstack()
+		3.)SA_ONSTACK flag ,specify this flag for execution os signal handler
+
+	->in seg voilation execution after programmed handler ,program could not resume
+
+Disabling signal delivery
+
+	->sigprocmask() this API examine and change blocked signals
+	int sigprocmask(int how,const sigset_t *set,signal_t *oldset );
+	sigset_t set -->data structure contains the list of signals to be blocked
+	sigemptyset(&set);
+	sigaddset(&set,4); -->adding signal number to data structure
+	sigprocmask(SIG_BLOCK|SIG_SETMASK,&set,NULL);
+	->the above API blocks  signals in set structure
+	sigprocmask(SIG_UNBLOCK,&set,NULL);
+	->the above API Unblocks signals
+
+	->Each occurance of a Real time signal is queued
+	->but for system signals only one occurance per signal is queued
+	->Applications can append new signals into existing block list
+	->Applications can overwrite block signal list,by applying SIG_SETMASK with sigprocmask
+	->signals 9,19 (SIGKILL,SIGSTOP) can not be disabled 
+	->signal handler have higher priority than process
+	->su=ignal subsystem responsible  for signal delivery to process
+	->Appliocations can be programmed to wait for a signal and procees when signal occurance is dicovered
+	->POSIX standred provides 2 API's for the apps to wait for signals
+	int sigwaitinfo(const sigst_t *set,siginfo_t *info);
+	int sigtimedwait(const sigset_t *set,siginfo_t *info,const struct timespe *timeout);
+		
+	->above calls are useful while designing apps with signals applied as communication resources [IPC]
+	->default signals are aysnc in unix where as in RTOS signals are by default sync
+
+	sample code
+
+	Step1:Block one of the signal(ALARM) ,because by default signals are async in Unix
+	Step2:alarm(5);  This api gives alarm signal after 5 seconds
+	Step3:wait for the alarm to araive
+		sigwautinfo(&sigset,&info); here info is outparam,this api wait on signal queue
+
+	sigqueue(pid_t pid,int sig,const union signal val)
+	->sigqueue sends the signal specified in the sig to the process whose pid is given by pid
+	->and is also used to check weather pid (process)is alive or not
+
+###########################################################  TIMERS  #########################################################
+	TIMERS
+	1.)Timers are events delevired to a process on expire of a time quantam ,measured on a choosen clock
+	2.)Appplications can be programmed to handle timer events either in async mode or synchronous mode
+	3.)Applications may need timer events for carrying the following situations
+		a.)initialization of specific jobs which are meant to be deterministic
+		b.)converting blocking system calls into bounded wait calls(like client wait for a elapsed time for responce from server)
+		c.)Execution of periodic operations
+	->linux kernel supports three seperate Timer interfaces
+	1.)System V BSD(Legacy unix)
+	2.)Posix realtime timer
+	3.)Linux native timer interface
+
+	System V BSD	
+	->setitimer(int which,const struct interval *new_value,struct itimeval *old_value);
+	->first argument is to specify type of the clock ,available options are
+	ITIMER_REAL:Measured on RTC(Real time clock) ,delevers sigalarm on expire
+	ITIMER_VIRTUAL:This clock decrements only when process runs in usermode ,sigvtalarm is delevered on expire
+	ITIMER_PROF:This clock decrements when the process is executing either in kernel or user mode SIGPROF signal delevered on expire
+	->Timer expire can be defined using the following structure
+		struct itimeval{
+			struct timeval it_it_interval;	->Next value
+			struct timeval it_value;	->current value
+		};
+	struct timeval{
+	long tv_sec;
+	long tv_usec;
+	};
+	
+	Limitation
+	->System V BSD interface doesnot allow applications configure multiple timers events on a same clock,second call will ovwewrite first values
+	->There is a possibility of loosing timer event ,since sigalarm is system defined signal,of which only ane event can be queued
+	->This interface doesnot support time measurment of CPU clock(nano seconds measurment is not possible)
+	
+
+	Posix Interface
+	->Posix interface offers the following facilities
+	1.)N n umber of timers for application,each identified by unique id	
+	2.)support for real time and CPU clocks (benefit for nano seconds)
+	3.)Applications allowed to choose timer notification method options ,supported are	
+			a.)synchronous poll		
+			b.)choice of a signal which is generated when the timer expires
+			c.)execution of a userlevel thread when the timer elasped
+			d.)execution of application created user level thread
+			
+	4.)Virtual clocks can be bound to a process or userlevel thread
+
+	Related API
+
+	->int timer_create(clockid_t clockid,struct sigevent *event,timer_t *timer_id);
+	->signal handlers registered through sigaction can recieve additional arguments ,by setting a sigaction flag sa_siginfo and assigning the handler sa_sigaction function pointer
+
+	->lrt Posix real time library
+
+SIGEVENT
+	->the sigevent structure is used by various API's to describe the way a process is to be modified about an event
+	
+		struct sigevent {
+			int sigev_notify;
+			int sigev_signal;
+			union signal sigev_value;
+			void (*sigev_nitify_function)(union sigval)	;
+			void (*sigev_nitify_attributes);
+			void sigev_notify_thread_id;
+			}
+
+	->sigev_nitify:specify how notifications to be performed,this foeld has the following values
+
+
+SIGEV_NONE:a null notification (disabling) generally used by apps when a timer is armed with a purpose of introdusing delay ex:sleep
+SIGEV_SIGNAL:Notify the process by sending the signal specified in sigev_signal
+SIG_CODE:This field is set to a value that depends on the API delevering the notification
+SI_SIGNO:this field is set to the signal number (i.e the same value as in sigev_signo)
+SI_VALUE:this field is set to the sigev_value
+SIGEV_THREAD:Notify the process by executing user level thread
+	->linux interface for the feature would cause interfaceto create a thread,when  first event occurs,and executed on every event 
+SIGEV_THREAD_ID:Application specific user level thread executed on expire of event
+	struct sigevent sev;
+	sev.signal_notify=SIGEV_THREAD;
+	sev.sigev_notify_function=thread_fun;
+	sev.sigev_notiry_attributes=NULL;
+
+
+Limux native Timers
+
+	->These system calls create and operate on a timer that delivers timer expiration notification via file descriptor
+
+	API's are
+	int timerfd_create (int clockid,int flags);
+	int timerfd_settime(int fd,int flags,const struct itimerspec *new_value,struct itimerspec *old_value);
+
+
+###########################################################  TIMERS  #########################################################
+
+
+
+
+###########################################################  SUMMARY OF SIGNALS  #########################################################
+
+
+Signals Handling is classified into 3 types
+	--->Signal handling 
+	--->Signal blocking
+	--->Synchronous Signal handling
+Signal handling
+	-->we can write application defined signal handlers or
+	-->Let the system pick default signal handlers or
+	-->Ignore the signals
+	-->API's used are
+		-->>signal (Legacy code uses this API)
+		-->sigaction (Advanced API and provides more options for handling signals)
+Signal blocking
+	-->Block the signal untill we performed uninterrupted work then unblock or continue to block
+	-->API's used are
+		-->sigprocmask
+Synchronous signal handling
+	-->Make signal handling synchronously
+	-->Block the signals on which we want to perform Synchronous signal handling (other wise when signal arives it delevered and handler is called or ignored then we cant make it synchronous )
+	-->use API's to watch pending list of blocked signals and if any signal arived the perform appropriate action
+	-->API's used ar
+		-->sigwaitinfo (keep a watch  on pending list of signals if any signal arives it returns untill then it is in blocked state)
+		-->sigtimedinfo(waited for signal for a particular amount of time if signal is not arrived then it returns error )
+			-->these API's are POSIX standard
+		-->signalfd (it creats a special file descriptor and then waits on read call untill signal arives )
+			-->it is Linux specific API and not portable
+Process communication With signal	
+	-->Related signals (Parent child) can communicate with other with API calls
+	-->API's used are
+		-->sigqueue
+
+###########################################################  SUMMARY OF SIGNALS  #########################################################

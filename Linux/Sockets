@@ -1,0 +1,139 @@
+Sockets
+
+1.)gather data
+2.)format data as per application specific platform nuatrel format
+3.)organize data as per transmission hardware format
+4.)interact with N/W hardware and start transmission
+
+Sockets Usage Areas
+
+1.)communication
+2.)Utility-tools (ping)
+3.)Security apps
+
+
+Network stack can be present in the following areas
+##################################################################
+		User
+	Software protocol
+	Session protocol
+
+---------------------------------------------------------------------
+	
+		Kernel
+	Network Stack
+	->Transport layer
+	->N/W layer
+	->DLL
+	->Physical layer
+
+
+##################################################################
+	
+		User
+	Software protocol
+	Session protocol
+
+	Network Stack
+	->Transport layer
+	->N/W layer
+	->DLL
+	->Physical layer
+---------------------------------------------------------------------
+	
+		Kernel
+
+
+
+##################################################################
+
+
+		User
+	Software protocol
+	Session protocol
+---------------------------------------------------------------------
+	
+		Kernel
+
+
+
+---------------------------------------------------------------------
+
+	Separate Chip for Network Stack
+	Network Stack
+	->Transport layer
+	->N/W layer
+	->DLL
+	->Physical layer
+
+
+int socket(int domain, int type, int protocol);
+First argument (domain)
+The domain argument specifies a communication domain; this selects the protocol family which will be used for communication.  These families
+       are defined in <sys/socket.h>.  The currently understood formats include:
+
+       Name                Purpose                          Man page
+       AF_UNIX, AF_LOCAL   Local communication              unix(7)
+       AF_INET             IPv4 Internet protocols          ip(7)
+       AF_INET6            IPv6 Internet protocols          ipv6(7)
+       AF_IPX              IPX - Novell protocols
+       AF_NETLINK          Kernel user interface device     netlink(7)
+       AF_X25              ITU-T X.25 / ISO-8208 protocol   x25(7)
+       AF_AX25             Amateur radio AX.25 protocol
+       AF_ATMPVC           Access to raw ATM PVCs
+       AF_APPLETALK        Appletalk                        ddp(7)
+       AF_PACKET           Low level packet interface       packet(7)
+
+Second argument (type)
+Specify the category of transport protocol with which the socket is to be bound
+
+Third argument(protocol)
+Specify the id of Transport protocol(if the domain has more "type"(STREAM,DGRAM) protocols ,we need to specifi the id of the protocol)
+
+
+
+Bind
+->bind is an optional system all need not be called if we are implimenting a client application 
+->for the client side if we are binding to a static port that code is not portable (if  the static port is already allocated to another application)
+->if we didn,t call bind automatecally bind call will made and  allocate available port number to socket
+->for server side it is good practice to bind our service to well known port and address(static binding)
+
+
+->socket is an abstraction layer which provides common API for N/W applications to interact with N/W protocols
+->N/W protocol stacks are organized into family s,each one implimenting data link,N/W,Transport layer servoces
+->applications will have to create a socket to bind with specific N/W family
+->each family must register with the socket layer as a object of type struct proto_ops 
+->when a socket is created the following structurs are allocated and bound to respective protocol opeations
+
+	struct sock,struct socket
+
+
+						TCP Header
+	
+->Sequence Number,Ackonowledge Number are of 32 bits
+->These numbers are used to identify and track TCP packets flowing between client and server
+->TCP handshake is a process of exchanging initial sequence Number
+->TCP has a variable length header ,data offset field is useful to get the header size
+->flags are used to notify reciever about the context of data
+->closing connection can be 3 way or 4 way handshake
+
+
+						WindowSize
+->This field is used to specify the available buffer for this connection
+->announcing this would help reciever rely data that sender can hold
+->Minimum =0,Maximum =65535
+
+
+						N/W Conjunction
+
+->if packet loss occurs on N/W due to lack of buffers on the routers it ios called N/W conjuction
+->most TCP implimentations use window size to announce free buffer after considering N/W conjunction
+->Linux implimentation of TCP uses 2581 RFC for conjuction avoidance and recovery
+->According to 2581 window size max(2*mss)
+->RFC 3390 according to this initial window size is 4*mss
+->Window size is rised by one mss on recieption of each ACK
+->When packet loss is discovered TCP switches over into conjuction avoidance mode using TCP sawtooth method(Drops window size by 50% and for each ACK increase the window size by 1 mss)
+->
+
+
+

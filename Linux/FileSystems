@@ -1,0 +1,9 @@
+VFS contains the following FileSyatems(FS)
+---> Block based FS ext2,ext3,ext4,xfs,ifs
+---> Networkbased FS NFS,CODA,smbfs
+---> Pseudo FS proc sysfs pipefs 
+---> Stackable FS ecryptfs,unionfs
+---> Special Purpose FS tmpfs,ramfs
+
+Application ----> VFS ---> BlockLayer ---> I/O Schedulars  -->  BlockDrivers ---> Storage devices
+

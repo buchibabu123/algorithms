@@ -1,0 +1,4 @@
+1.)Header files are not required for Programs
+2.)header files contain only Declarations
+3.)Library (ex.libc) contains definetions of pre build functions
+4.)if we define a user defined function  before main no need to declare it
