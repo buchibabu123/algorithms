@@ -1,0 +1,8 @@
+in Regression we are tryimg to predict output from given data set (Predict exact value Ex: predict the exact price of a house)
+in classafication we are trying to classify which group the given input belongs from the given data set (classify the out put in to a category ex: the house value will be in particular range or not)
+
+
+--->   Overfitting :   Addition of more independent variables to Multi regression reslults worst predection
+--->   MultiCollinearity : Addtion of more independent variables  which has potentially related to each other make predection worst
+--->   Ideal Solutions : indepedent variables corelated to dependenty variable
+
