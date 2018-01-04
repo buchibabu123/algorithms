@@ -1,0 +1,22 @@
+The inputs to the vertex shader consist of the following:
+• • Uniforms—Constant data used by the vertex shader.
+• Samplers—A specific type of uniforms that represent textures used by
+     the vertex shader. Samplers in a vertex shader are optional.
+• Attributes—Per-vertex data supplied using vertex arrays.
+Shader program—Vertex shader program source code or executable
+ that describes the operations that will be performed on the vertex.
+
+
+Vertex shaders can be used for traditional vertex-based operations such as
+transforming the position by a matrix, computing the lighting equation to
+generate a per-vertex color, and generating or transforming texture coordi-
+nates. Alternately, because the vertex shader is specified by the application,
+vertex shaders can be used to do custom vertex transformations.
+
+After clipping and culling, the primitive is ready to be passed to the next stage of the pipeline, which is the rasterization stage.
+Rasterization is the process that converts primitives into a set of two-dimensional frag-ments, which are processed by the fragment shader. These two-dimensional fragments represent pixels that can be drawn on the screen.
+Blending combines the newly generated fragment color value with the color values stored in the framebuffer at location (xw, yw).
+
+
+
+
