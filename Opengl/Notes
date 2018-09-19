@@ -1,0 +1,180 @@
+
+
+
+
+Get access to a native display  ---> Get access to a native display
+
+Setup the windowing system, create a window ---> Create an EGLSurface for rendering from the native window
+
+An EGL "configuration" describes the capabilities an application requires and the type of surfaces that can be used for drawing.
+Each implementation exposes a number of different configurations, and an application needs to describe to EGL what capabilities it
+requires so that an appropriate one can be chosen
+
+/*      Make OpenGL ES the current API.
+	EGL needs a way to know that any subsequent EGL calls are going to be affecting OpenGL ES,
+	rather than any other API (such as OpenVG).
+ */
+eglBindAPI(EGL_OPENGL_ES_API);
+
+/*      Create a context.
+	EGL has to create what is known as a context for OpenGL ES. The concept of a context is OpenGL ES's way of encapsulating any
+	resources and state. What appear to be "global" functions in OpenGL actually only operate on the current context. A context
+	is required for any operations in OpenGL ES.
+	Similar to an EGLConfig, a context takes in a list of attributes specifying some of its capabilities. However in most cases this
+	is limited to just requiring the version of the OpenGL ES context required - In this case, OpenGL ES 2.0.
+ */
+/*      Bind the context to the current thread.
+	Due to the way OpenGL uses global functions, contexts need to be made current so that any function call can operate on the correct
+	context. Specifically, make current will bind the context to the thread it's called from, and unbind it from any others. To use
+	multiple contexts at the same time, users should use multiple threads and synchronise between them.
+ */
+
+The reason these are called "fragment" shaders instead of "pixel" shaders is due to a small technical difference between the two
+concepts. When you colour a fragment, it may not be the final colour which ends up on screen. This is particularly true when 
+performing blending, where multiple fragments can contribute to the final pixel colour.
+
+/*      Concept: Vertex Shaders
+	Vertex shaders primarily exist to allow a developer to express how to orient vertices in 3D space, through transformations like 
+	Scaling, Translation or Rotation. Using the same basic layout and structure as a fragment shader, these take in vertex data and 
+	output a fully transformed set of positions. Other inputs are also able to be used such as normals or texture coordinates, and can 
+
+/*      Use the Program
+Calling glUseProgram tells OpenGL ES that the application intends to use this program for rendering. Now that it's installed into
+the current state, any further glDraw* calls will use the shaders contained within it to process scene data. Only one program can
+be active at once, so in a multi-program application this function would be called in the render loop. Since this application only
+uses one program it can be installed in the current state and left there.
+ */
+glUseProgram(shaderProgram);
+
+
+*      Set the clear color
+At the start of a frame, generally you clear the image to tell OpenGL ES that you're done with whatever was there before and want to
+draw a new frame. In order to do that however, OpenGL ES needs to know what colour to set in the image's place. glClearColor
+sets this value as 4 floating point values between 0.0 and 1.0, as the Red, Green, Blue and Alpha channels. Each value represents
+the intensity of the particular channel, with all 0.0 being transparent black, and all 1.0 being opaque white. Subsequent calls to
+glClear with the colour bit will clear the frame buffer to this value.
+The functions glClearDepth and glClearStencil allow an application to do the same with depth and stencil values respectively.
+*/
+glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+/*      Clears the color buffer.
+	glClear is used here with the Colour Buffer to clear the colour. It can also be used to clear the depth or stencil buffer using 
+	GL_DEPTH_BUFFER_BIT or GL_STENCIL_BUFFER_BIT, respectively.
+ */
+glClear(GL_COLOR_BUFFER_BIT);
+/***********************************************************************/
+
+// Bind the vertex attribute "myVertex" to location VERTEX_ARRAY (0)
+glBindAttribLocation(shaderProgram, VERTEX_ARRAY, "myVertex");
+
+
+
+// Enable the user-defined vertex array
+glEnableVertexAttribArray(VERTEX_ARRAY);
+
+// Sets the vertex data to this attribute index, with the number of floats in each position
+glVertexAttribPointer(VERTEX_ARRAY, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+
+/***********************************************************************/
+
+Understanding EGL: The OpenGL ES APIs require the EGL as a prerequisite before they can effectively be used on the hardware devices. The EGL provides an interface between the OpenGL ES APIs and the underlying native windowing system. Different OS vendors have their own ways to manage the creation of drawing surfaces, communication with hardware devices, and other configurations to manage the rendering context. EGL provides an abstraction, how the underlying system needs to be implemented in a platform-independent way.
+
+
+/***********************************************************************/
+Performance wise, there is a vertex cache that stores the outputs of the last n processed vertices. Before a new vertex is processed, its index is checked against the indices in the vertex cache. If the index is in the vertex cache, the respective previously processed data is sent to the remaining of the pipeline without further processing.
+
+Taking advantage of the vertex cache, can therefore improve performance when using indexes, either explicitly, or implicitly, as in triangle strips and fans. For instance, in a triangle strip, at most one vertex per new triangle will be processed. When using indexes with regular triangles, the gain is not as easy to compute, and the indices may require a reorganization of the vertex data to improve vertex cache hit
+/***********************************************************************/
+
+Vertices  -->> VetrexShader  --> TransformedVertices
+
+Primitive Assembly
+TransformedVertices + PrimitiveConnectivity = Primitives
+Each time a frame is rendered, data is sent from the client side (CPU) to the shader executable on the server side (GPU) using glVertexAttribPointer. This function uses the queried generic vertex attribute to bind the data with OpenGL ES pipeline.
+
+
+Depth buffer: This is used to prevent background pixels from rendering if there is a closer pixel available. The rule of prevention of the pixels can be controlled using special depth rules provided by OpenGL ES 3.0.
+Stencil buffer: The stencil buffer stores the per-pixel information and is used to limit the area of rendering.
+
+The OpenGL ES API allows us to control each buffer separately. These buffers can be enabled and disabled as per the requirement of the rendering. The OpenGL ES can use any of these buffers (including color buffer) directly to act differently. These buffers can be set via preset values by using OpenGL ES APIs, such as glClearColor, glClearDepthf, and glClearStencil.
+
+There is a difference between a 2D coordinate and a pixel. A 2D coordinate is a very precise representation of where a point is in 2D space, while a 2D pixel is an approximation of that point limited by the resolution of your screen/window.
+
+Depth Test:This stage checks the corresponding depth (and stencil) value (we'll get to those later) of the fragment and uses those to check if the resulting fragment is in front or behind other objects and should be discarded accordingly
+
+A fragment in OpenGL is all the data required for OpenGL to render a single pixel. 
+/***********************************************************************/
+
+Generates a simple background texture and Display it 
+GLuint                                  m_uiStarTex;
+CPVRTBackground                 m_BG;
+
+glGenTextures(1, &m_uiStarTex);
+glBindTexture(GL_TEXTURE_2D, m_uiStarTex);
+memset(pTexData, 0, uiStarW*uiStarH);
+fill pTexData  with text 
+glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, uiStarW, uiStarH, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, pTexData);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+delete [] pTexData;
+
+// Draw star background
+m_BG.Draw(m_uiStarTex);
+
+/***********************************************************************/
+
+Binding the same context in 2 threads is NEVER allowed.
+Binding 2 different contexts in 2 different threads to the same surface is NEVER allowed.
+Binding 2 different contexts in 2 different threads to 2 different surfaces MAY be allowed, but MAY fail (depending on the GPU implementation you are using).
+
+/***********************************************************************/
+Shared contexts
+
+Shared contexts are useful in loading games. Because of the heavy of uploading data (especially textures) to GPU; if you want your game’s frame rate to be stable, you should run the uploading on another thread. Due to the three rules above, you must create a secondary context that uses the same internal state machine with the primary context. These primary and secondary contexts are called shared contexts.
+
+Please note that, these two contexts share internal state machine only, they DO NOT share their command buffers.
+
+To create the secondary context, you call:
+
+EGLContext eglCreateContext(
+		EGLDisplay display,
+		EGLConfig config,
+		EGLContext share_context,
+		EGLint const * attrib_list);
+
+The 3rd parameter share_context is important here, it is the primary context.
+
+In the secondary thread, you should not draw anything, just upload data to GPU. Hence the surface that you use for this context should be a pixel buffer surface:
+1
+2
+3
+4
+
+EGLSurface eglCreatePbufferSurface(
+		EGLDisplay display,
+		EGLConfig config,
+		EGLint const * attrib_list);
+
+
+Binding the same context in 2 threads is NEVER allowed.
+Binding 2 different contexts in 2 different threads to the same surface is NEVER allowed.
+Binding 2 different contexts in 2 different threads to 2 different surfaces MAY be allowed, but MAY fail (depending on the implementation you are using).
+
+
+
+Lights in OpenGl
+
+
+3 Types of Lighting in Opengl
+
+1.)Ambient
+2.)Diffuse
+3.)Specular
+
+
+Notes regarding performance
+
+Performance wise, there is a vertex cache that stores the outputs of the last n processed vertices. Before a new vertex is processed, its index is checked against the indices in the vertex cache. If the index is in the vertex cache, the respective previously processed data is sent to the remaining of the pipeline without further processing.
+
+Taking advantage of the vertex cache, can therefore improve performance when using indexes, either explicitly, or implicitly, as in triangle strips and fans. For instance, in a triangle strip, at most one vertex per new triangle will be processed. When using indexes with regular triangles, the gain is not as easy to compute, and the indices may require a reorganization of the vertex data to improve vertex cache hits.
