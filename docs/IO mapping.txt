@@ -1,1 +1,54 @@
 I/O mapping A technique used primarily in microprocessing whereby peripheral devices are interfaced to a processor whose architecture supports input and output instructions. An I/O mapped device is assigned one or more of the processor's I/O port addresses, and data and status information are transferred between the processor and the peripheral device using the processor's input and output instructions.
+
+
+
+Memory mapped I/O and Isolated I/O
+
+As a CPU needs to communicate with the various memory and input-output devices
+(I/O) as we know data between the processor and these devices flow with the
+help of the system bus. There are three ways in which system bus can be
+allotted to them :
+
+Separate set of address, control and data bus to I/O and memory.
+Have common bus (data and address) for I/O and memory but separate control
+lines.
+Have common bus (data, address, and control) for I/O and memory.
+In first case it is simple because both have different set of address space
+and instruction but require more buses.
+
+Isolated I/O –
+Then we have Isolated I/O in which we Have common bus(data and address) for
+I/O and memory but separate read and write control lines for I/O. So when CPU
+decode instruction then if data is for I/O then it places the address on the
+address line and set I/O read or write control line on due to which data
+transfer occurs between CPU and I/O. As the address space of memory and I/O is
+isolated and the name is so. The address for I/O here is called ports. Here we
+have different read-write instruction for both I/O and memory.
+
+
+
+Memory Mapped I/O –
+In this case every bus in common due to which the same set of instructions
+work for memory and I/O. Hence we manipulate I/O same as memory and both have
+same address space, due to which addressing capability of memory become less
+because some part is occupied by the I/O.
+
+
+
+ 
+
+
+
+Differences between memory mapped I/O and isolated I/O –
+
+ISOLATED I/O	MEMORY MAPPED I/O
+Memory and I/O have seperate address space	Both have same address space
+All address can be used by the memory	Due to addition of I/O addressable
+memory become less for memory
+Separate instruction control read and write operation in I/O and Memory	Same
+instructions can control both I/O and Memory
+In this I/O address are called ports.	Normal memory address are for both
+More efficient due to seperate buses	Lesser efficient
+Larger in size due to more buses	Smaller in size
+It is complex due to separate separate logic is used to control both.
+Simpler logic is used as I/O is also treated as memory only.
