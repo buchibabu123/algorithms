@@ -1,0 +1,44 @@
+1-->c++ allows to overload member fuctions on the basics of const and non const
+2-->const parameters allows to overload mmber functions and normal functions but it should be reference/pointer
+
+class test{
+public:
+
+/*  point 1 */
+void print(int val);
+void print(const int val);  // wont work ( error )
+void print(const int *val);  // will work 
+
+
+/*   point 2  */
+void print();  // here both are over loaded functions based on const
+void print() const ;
+};
+
+size_t
+
+1.) used to represent size of objects/variab;es in bytes
+2.)sizeof returns this data type only
+3.) it guarante to be big enough to contain the size of the biggest object that system can handle
+	a.) if compiler is 32 bit than it is typeded of unsigned int
+	b.) for 64 it is unsigned long long
+4.) it is never negative
+
+
+friend functions/classes
+
+1.) keyword friend is used to make  some function/class as friend of your class
+2.) friend function or class can access private/protected/public data members or member functions of another class
+3.) function can ot become friend of another unction
+4.) class can not becone friend of another function
+	we can use friend only in class not in function
+5.)friendship is not mutual . if a class A is friend of B then B doesn't become friend if A autometically
+6.) Friendship is not inherted
+
+==> with friend function we are accessing privae memebers means breaking encapsulation ?  no here class is telling that a function in friend  of him not the function himself
+
+class employee{
+name,age,credentials;
+
+friend void admin();  --> here admin class/function can change/access employee details which are private to employee
+};

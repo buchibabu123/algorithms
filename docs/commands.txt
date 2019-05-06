@@ -1,0 +1,5 @@
+debug keyword in all the C++ files available in various directories and sub-directories
+	$find . -name \*.cpp -exec grep -q "debug" '{}' \; -print
+
+
+
