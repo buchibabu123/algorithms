@@ -2,14 +2,6 @@
 #include <vector>
 using namespace std;
 
-class Observer
-{
-	public:
-		int position;
-		virtual void update(int)=0;
-
-};
-
 /*
  * Here Car is subject , when ever there is a Modification in position  it calls notify function which inturn calls list of observers
  * Here we need to register our objects to subject ( Car ) when ever they are created 
@@ -19,6 +11,16 @@ class Observer
  * This makes subject and observers loosely coupled. Subject and observers have no explicit knowledge of each other. Observers can be added and removed independently at run-time.
  * This notification-registration interaction is also known as publish-subscribe.
  * */
+
+
+class Observer
+{
+	public:
+		int position;
+		virtual void update(int)=0;
+
+};
+
 
 class Car
 {
