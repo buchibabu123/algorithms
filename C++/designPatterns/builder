@@ -1,0 +1,2 @@
+if we cant to create an object which is composed of different complex objects which are related to ech other we need to use builder design pattern 
+--> here the director class creats those complex objects step by step
