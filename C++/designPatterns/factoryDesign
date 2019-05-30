@@ -21,3 +21,6 @@ advantages:
 --> less code changes if we change the object creation process
 --> we can create object without exposing implimentation logic to client
 --> we can ge the benifit of virtual constuctor
+
+
+LINKS:  oodesign.com
