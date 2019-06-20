@@ -7,4 +7,15 @@
 ---> intersection of 2 linked lists
 ---> segregate even and odd nodes in a linked list
 ---> check if a linked list is circular or not
+	{
+		(1) 2 pointer approach increment slow pointer bt one node and fast pointer by 2 nodes at one point in the loop they meet if the list has loop otherwise the list didn't has loop
+		(2) visit each list and add a flag (Mark) to node if we find the node is already visited ( by checking mark flag )  then the list has loop
+		(3) hash each visited node address (or link )in to hash table , each time we visited node check the hash table if the address present if we find the address already there list has loop 
+	
+		============================= Removing =================================================
+			
+		(1) 2 pointer and 2 loop technique , start from head node pointer check this node with all loop nodes if the node matches any loop nodes store the previous of loop node otherwise increment pointer	by one step and repeat the procedure (checking with loop nodes) till we find the loop
+		(2) use the following logic   ===> the diatance from head node to loop start node is equals to distance from slow or fast pointer to loop start node , so iterate from head node and slow pointer node at same Pace till they are equal , once they are equal make slow pointer of link to NULL
+
+	}
 ---> 
