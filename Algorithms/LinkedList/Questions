@@ -11,6 +11,13 @@
 ---> pairwise swap elements  of a linked list
 ---> intersection of 2 linked lists
 ---> segregate even and odd nodes in a linked list
+{
+
+		(1) move odd nodes to the end os list an dkeep ecen at start ( store first even node in a seperate pointer and change head )
+		(2) break the list into even and odd list at the end add them . take 4 pointers 2 for pointing start of even and odd node lists and 2 for pointing end nodes 
+
+
+}
 ---> check if a linked list is has circular loop  or not
 	{
 		(1) 2 pointer approach increment slow pointer bt one node and fast pointer by 2 nodes at one point in the loop they meet if the list has loop otherwise the list didn't has loop
