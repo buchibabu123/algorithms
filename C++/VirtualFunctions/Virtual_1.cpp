@@ -56,7 +56,7 @@ int main()
 	Derived D;
 	p = &D;
 	p->fun();
-//	D.fun();
-//	Base B(10);
+	D.fun();
+	Base B(10);
 
 }

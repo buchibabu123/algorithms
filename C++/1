@@ -1,0 +1,31 @@
+#include <iostream>
+
+using namespace std;
+
+
+class base
+{
+
+	int num;
+	public:
+
+	Base();
+
+};
+
+
+Base::Base()
+{
+
+cout <<"Base class constructor"<<endl;
+
+}
+
+
+int main()
+{
+
+Base *B = new Base(); // Normal Call 
+
+
+}
