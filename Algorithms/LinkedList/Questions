@@ -7,4 +7,5 @@
 ---> intersection of 2 linked lists
 ---> segregate even and odd nodes in a linked list
 ---> check if a linked list is circular or not
----> 
+---> finding Intersection point of 2 lists
+	find the lenght of 2 linked lists L1,L2 ,take the difference D = L1-L2 from the head of biggest list traverse D nodes now onwords both the     lists has same  number of nodes , iterate the nodes from both the lists untill we find thematch nodes
