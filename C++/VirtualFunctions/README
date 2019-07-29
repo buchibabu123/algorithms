@@ -1,0 +1,2 @@
+vtable is stored in rodata section of object
+we can use objdump , nm ,readelf to analyze object file

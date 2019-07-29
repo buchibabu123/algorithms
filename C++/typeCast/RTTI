@@ -1,0 +1,7 @@
+Run Time Type Identification ( RTTI ) allows progams that uses pointers or references to base classes to retrieve the actual derived types of the objects to which these pointers or references refer
+
+RTTI is provided through two operators:
+
+1)  The typeid operator, which returns the actual type of the object referred to by a pointer (or a reference).
+2)  The dynamic_cast operator, which safely converts from a pointer (or reference) to a base type to a pointer (or reference) to a derived type.
+

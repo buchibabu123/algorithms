@@ -1,4 +1,9 @@
 ---> Nth from Last
+	{
+	
+		take 2 pointers  ( ref, ptr ) and initialize both to head move ref pointer to N nodes from Head , from that on words move 2 pointers at same Pace once ref pointer reached end of list ptr pointer points Nth from Last
+
+	}
 ---> detect loop in a linked list and find the length of the loop
 ---> checking a list is palindrome or not
 ---> remove duplicates in a sorted and unsorted array
@@ -6,6 +11,32 @@
 ---> pairwise swap elements  of a linked list
 ---> intersection of 2 linked lists
 ---> segregate even and odd nodes in a linked list
+<<<<<<< HEAD
 ---> check if a linked list is circular or not
 ---> finding Intersection point of 2 lists
 	find the lenght of 2 linked lists L1,L2 ,take the difference D = L1-L2 from the head of biggest list traverse D nodes now onwords both the     lists has same  number of nodes , iterate the nodes from both the lists untill we find thematch nodes
+=======
+{
+
+		(1) move odd nodes to the end os list an dkeep ecen at start ( store first even node in a seperate pointer and change head )
+		(2) break the list into even and odd list at the end add them . take 4 pointers 2 for pointing start of even and odd node lists and 2 for pointing end nodes 
+
+
+}
+---> check if a linked list is has circular loop  or not
+	{
+		(1) 2 pointer approach increment slow pointer bt one node and fast pointer by 2 nodes at one point in the loop they meet if the list has loop otherwise the list didn't has loop
+		(2) visit each list and add a flag (Mark) to node if we find the node is already visited ( by checking mark flag )  then the list has loop
+		(3) hash each visited node address (or link )in to hash table , each time we visited node check the hash table if the address present if we find the address already there list has loop 
+	
+		============================= Removing =================================================
+			
+		(1) 2 pointer and 2 loop technique , start from head node pointer check this node with all loop nodes if the node matches any loop nodes store the previous of loop node otherwise increment pointer	by one step and repeat the procedure (checking with loop nodes) till we find the loop
+		(2) use the following logic   ===> the diatance from head node to loop start node is equals to distance from slow or fast pointer to loop start node , so iterate from head node and slow pointer node at same Pace till they are equal , once they are equal make slow pointer of link to NULL
+
+	}
+---> removing intersection point of 2 linked lists
+
+	(1) find the lenght of 2 linked lists L1,L2 . take their difference D = L2-L1 or L1-L2  from bigger list iterate D nodes from this point both the lists has same number of nodes . iterate at same Pace from bothe the lists till we get interaction point
+	(2) attach one of the ( bigger ) list end to head of 2nd list then the lists look like Libked list with Circle Loop then find and remove loop ( but save the tail and  head of first and 2nd lists so that we can remove the attachment )
+>>>>>>> f6daf6f3980a828afd8768fc9d61b9e1cb9f210c
