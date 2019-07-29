@@ -1,0 +1,9 @@
+==========================  UP CASTING   ======================
+Converting a derived-class reference or pointer to a base-class reference or pointer is called upcasting. It is always allowed for public inheritance without the need for an explicit type cast.
+
+Actually this rule is part of expressing the is-a relationship. A Derived object is a Base object in that it inherits all the data members and member functions of a Base object. Thus, anything that we can do to a Base object, we can do to a Derived class object.
+
+==========================  DOWN CASTING   ======================
+The downcasting, the opposite of upcasting, is a process converting a base-class pointer or reference to a derived-class pointer or reference.
+
+It is not allowed without an explicit type cast. That's because a derived class could add new data members, and the class member functions that used these data members wouldn't apply to the base class. 
