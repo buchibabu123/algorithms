@@ -54,12 +54,13 @@ int main()
 
 	bind(sockId,(struct sockaddr*)&sockAddress,sizeof(sockAddress));
 	listen(sockId,20);
-	
+
 	int clientID;
 
 	while (1)
 	{
 		clientID = accept(sockId,(struct sockaddr*)NULL,NULL);
+		fprintf(stderr,"socket id == [ %d ]\n",clientID);
 
 		pthread_create(&tId,&attributes,clientHandler,&clientID);
 
@@ -72,3 +73,12 @@ int main()
 	return 0;
 }
 
+
+void *clientHandler(void *args)
+{
+
+	int clientID = *(int*)args;
+
+	fprintf(stderr,"socket id in thread == [ %d ]\n",clientID);
+
+}
