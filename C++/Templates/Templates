@@ -1,0 +1,27 @@
+1.) they are 2 places where we can apply templates
+	--> functions
+	--> classes
+2.) templates are the way to write generic programming
+3.) here the main point is to pass data type as parameter to function/class <dataType>
+
+
+
+------------------------------------
+template <class RT,class T1,class T2>
+
+RT max(T1 a , T2 b)
+{
+.....
+}
+
+int a=10;
+double b=20.5
+when we call Max<double>(a,b) then the following auto deuction happens
+
+RT   -> double
+T1   -> int
+T2   -> double
+
+we cal call like this also max<double,int,double>Max(a,b)
+
+when we call template functions like Max(a,b) a,b are auto deduced to corresponding data type in template function
