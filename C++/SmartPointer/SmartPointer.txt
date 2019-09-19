@@ -1,0 +1,4 @@
+--> for smart pointers we use the local variable concept .... when the control goes out of cope object getting destroyed and desctructor gets called 
+--> here we wrapps the new object in smart pointer class and passes new object in constructor of smart pointer SmartPointerClass<class_name> sp(new class_name()); 
+--> here sp is local object and in Smartpointer class we assign new object ( new class_name() ) to SmartPointerClass local variable (sPointer)
+--> when the local object sp goes outof scoope descttructor of sp ( SmartPointerClass ) gets callwd where we free the object
